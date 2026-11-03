@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Embriología: segundo parcial</title>
+<style>
+:root{--bg:#f7f4f8;--ink:#2b2140;--mut:#6b6280;--card:#fff;--line:#ddd5e6;--acc:#b8326a;--ok:#2f7d5b;--bad:#b3362f;--hl:#efe6f7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17121f;--ink:#efe9f7;--mut:#a79fba;--card:#231c30;--line:#3a3050;--acc:#ee7fae;--ok:#6fcf9f;--bad:#f08a82;--hl:#2f2542}}
+:root[data-theme="dark"]{--bg:#17121f;--ink:#efe9f7;--mut:#a79fba;--card:#231c30;--line:#3a3050;--acc:#ee7fae;--ok:#6fcf9f;--bad:#f08a82;--hl:#2f2542}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,"Iowan Old Style",serif}
+main{max-width:640px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:1.45rem;margin:0 0 2px;letter-spacing:-.01em}
+.sub{color:var(--mut);font-size:.9rem;margin:0 0 14px}
+nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+button,select{font:inherit;color:inherit}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:.92rem}
+nav button[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+select{width:100%;padding:9px 10px;border:1px solid var(--line);background:var(--card);border-radius:10px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 18px;min-height:190px;display:flex;flex-direction:column;justify-content:center;text-align:center;cursor:pointer;width:100%}
+.card small{color:var(--mut);margin-bottom:8px;font-size:.8rem}
+.card .t{font-size:1.25rem}
+.card.back{border-color:var(--acc);background:var(--hl)}
+.row{display:flex;gap:8px;margin:12px 0;align-items:center;justify-content:space-between}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 14px;cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}
+.cnt{color:var(--mut);font-size:.9rem}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:11px 13px;margin:8px 0;cursor:pointer;font-size:.98rem}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,var(--card))}
+.q{font-size:1.15rem;margin:6px 0 10px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--acc)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.m{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;font-size:.9rem;line-height:1.35}
+.m.sel{border-color:var(--acc);background:var(--hl)}
+.m.done{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,var(--card));cursor:default}
+.m.err{border-color:var(--bad)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;margin-bottom:8px}
+summary{cursor:pointer}
+details p{margin:8px 0 0;color:var(--acc)}
+.big{font-size:2.4rem;margin:6px 0}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>Embriología: segundo parcial</h1>
+<p class="sub">Anexos, placenta, gemelos, aborto, esqueleto, piel, arcos faríngeos, lengua y cara.</p>
+<nav id="tabs" role="tablist"></nav>
+<select id="topic" aria-label="Tema"></select>
+<section id="view"></section>
+</main>
+<script>
+var D=[
+["Anexos","¿De qué se origina el amnios?","Del epiblasto"],
+["Anexos","¿Función principal del saco vitelino?","Hematopoyesis temprana"],
+["Anexos","¿Función principal del alantoides?","Angiogénesis: vasos del cordón umbilical"],
+["Anexos","¿En qué se convierte el alantoides?","En el uraco (ligamento umbilical medio)"],
+["Anexos","¿Qué forma el pedículo de fijación al plegarse el embrión?","El primordio del cordón umbilical"],
+["Anexos","¿Qué es la fístula uracal?","Uraco permeable: sale orina por el ombligo"],
+["Anexos","¿Qué es el quiste uracal?","Segmento del uraco sin obliterar con cavidad quística"],
+["Líquido amniótico y cordón","¿Composición del líquido amniótico?","99% agua y 1% sales y compuestos orgánicos"],
+["Líquido amniótico y cordón","¿Volumen del líquido amniótico a término?","800–1000 ml"],
+["Líquido amniótico y cordón","¿Causa típica de polihidramnios?","Atresia esofágica"],
+["Líquido amniótico y cordón","¿Causa típica de oligohidramnios?","Agenesia renal bilateral"],
+["Líquido amniótico y cordón","¿Cuál es una consecuencia del oligohidramnios?","Hipoplasia pulmonar (secuencia de Potter)"],
+["Líquido amniótico y cordón","¿Desde qué semana se hace la amniocentesis?","Desde la semana 15 (15–20 ml)"],
+["Líquido amniótico y cordón","¿Qué sugiere la AFP elevada en líquido amniótico?","Defectos del tubo neural (AFP baja: trisomía 21)"],
+["Líquido amniótico y cordón","¿Estructura vascular definitiva del cordón?","2 arterias y 1 vena en gelatina de Wharton"],
+["Líquido amniótico y cordón","¿Longitud normal del cordón umbilical?","30–90 cm (media 55 cm)"],
+["Líquido amniótico y cordón","¿Qué problema causa un nudo verdadero?","Compresión de vasos y anoxia fetal"],
+["Placenta","¿Qué forma el componente fetal de la placenta?","El corion frondoso"],
+["Placenta","¿Qué forma el componente materno?","La decidua basal"],
+["Placenta","¿Qué es el corion leve?","Corion sin vellosidades; no forma parte de la placenta"],
+["Placenta","¿Qué lleva la vellosidad terciaria?","Capilares y células de Hofbauer (placenta definitiva)"],
+["Placenta","¿Cuántos cotiledones tiene la cara materna?","15 a 20"],
+["Placenta","¿Qué es la placenta previa?","Implantada en el segmento inferior, tapa el cérvix"],
+["Placenta","¿Qué es la placenta percreta?","Atraviesa el miometrio hasta el perimetrio"],
+["Placenta","¿Qué es la placenta succenturiata?","Lóbulos accesorios por vellosidades persistentes en el corion leve"],
+["Placenta","¿Qué es la placenta velamentosa?","El cordón se inserta en las membranas, no en el disco"],
+["Placenta","¿Qué es la placenta en raqueta?","Cordón insertado en el borde de la placenta"],
+["Placenta","¿Cómo es la mola hidatidiforme completa?","100% paterna, racimo de uvas, hCG alta, sin embrión"],
+["Transporte placentario","¿Qué pasa por difusión simple?","O2, CO2, agua, electrolitos y urea"],
+["Transporte placentario","¿Cómo pasa la glucosa?","Difusión facilitada con GLUT-1"],
+["Transporte placentario","¿Cómo pasan los aminoácidos?","Transporte activo (gasta ATP)"],
+["Transporte placentario","¿Qué inmunoglobulina cruza la placenta?","Solo la IgG, por pinocitosis"],
+["Transporte placentario","¿Qué defectos causó la talidomida?","Amelia y focomelia"],
+["Transporte placentario","¿Qué causa Toxoplasma gondii al cruzar la placenta?","Toxoplasmosis congénita"],
+["Gemelos y aborto","¿Cómo son los gemelos dicigóticos?","Diamnióticos, dicoriónicos y diplacentarios"],
+["Gemelos y aborto","¿Cómo son los monocigóticos que se dividen en blastocisto?","Diamnióticos, monocoriónicos, placenta única"],
+["Gemelos y aborto","¿Cómo son los monocigóticos que se dividen en disco bilaminar?","Monoamnióticos y monocoriónicos"],
+["Gemelos y aborto","¿Qué es el feto papiráceo?","Muerte fetal tardía; feto comprimido contra la pared uterina"],
+["Gemelos y aborto","¿Qué pasa en la transfusión feto-fetal?","Monocoriónicos: donante anémico, receptor con policitemia"],
+["Gemelos y aborto","¿Cuál es la definición de aborto?","Expulsión antes de la semana 21 o con menos de 500 g"],
+["Gemelos y aborto","¿Qué es el aborto habitual?","Expulsión espontánea en 2–3 o más embarazos consecutivos"],
+["Gemelos y aborto","¿Qué es el aborto diferido?","Producto muerto retenido, sin foco fetal"],
+["Gemelos y aborto","¿Qué es el aborto séptico?","Infección tras un aborto inducido con mala higiene"],
+["Esqueleto","¿Qué forma el ala orbitaria?","El ala menor del esfenoides"],
+["Esqueleto","¿Qué forma la cápsula ótica?","Porción petrosa y mastoidea del temporal"],
+["Esqueleto","¿Escafocefalia: qué sutura se cierra?","La sagital (cráneo alargado)"],
+["Esqueleto","¿Braquicefalia: qué sutura se cierra?","La coronal (cráneo alto en torre)"],
+["Esqueleto","¿Plagiocefalia?","Cierre de la sutura coronal de un solo lado"],
+["Esqueleto","¿Trigonocefalia?","Cierre de la sutura frontal (metópica)"],
+["Esqueleto","¿Qué forma el núcleo pulposo?","La notocorda"],
+["Esqueleto","¿Qué es el síndrome de Klippel-Feil?","Fusión de vértebras cervicales y cuello corto"],
+["Esqueleto","¿Qué es la espina bífida oculta?","Falta del arco vertebral"],
+["Esqueleto","¿Qué causa la sindactilia?","Falta de apoptosis en las membranas interdigitales"],
+["Esqueleto","¿Qué es la focomelia?","Extremidades muy pegadas al tronco"],
+["Esqueleto","¿Con qué se trata la displasia congénita de cadera?","Con el arnés de Pavlik"],
+["Piel y anexos","¿Qué forma la vérnix caseosa?","Peridermo apoptótico mezclado con sebo"],
+["Piel y anexos","¿De dónde vienen los melanocitos?","De la cresta neural"],
+["Piel y anexos","¿De dónde vienen las células de Langerhans?","De la médula ósea (estrato espinoso)"],
+["Piel y anexos","¿Qué estrato existe solo en piel gruesa?","El estrato lúcido"],
+["Piel y anexos","¿Cuánto dura la renovación de la epidermis?","Unos 28 días"],
+["Piel y anexos","¿Tipo de secreción de las glándulas sebáceas?","Holocrina"],
+["Piel y anexos","¿Tipo de secreción de las glándulas sudoríparas ecrinas?","Merocrina"],
+["Piel y anexos","¿Dónde están las glándulas sudoríparas apocrinas?","Axila, región anogenital y areolas"],
+["Piel y anexos","¿Qué es la atelia y qué es la politelia?","Ausencia de pezones y pezones extra"],
+["Piel y anexos","¿Con qué síndrome se asocia la ginecomastia?","Klinefelter"],
+["Piel y anexos","¿Qué células forman el esmalte dental?","Ameloblastos (ectodermo oral)"],
+["Piel y anexos","¿Qué células forman la dentina?","Odontoblastos (cresta neural)"],
+["Piel y anexos","¿Cuántos dientes deciduos se forman?","20"],
+["Arcos faríngeos","¿De qué tejido derivan los arcos faríngeos?","Mesénquima derivado de crestas neurales"],
+["Arcos faríngeos","¿De qué capa derivan las bolsas faríngeas?","Endodermo"],
+["Arcos faríngeos","¿Qué forma el primer surco?","El conducto auditivo externo"],
+["Arcos faríngeos","¿Qué forma la 1.ª bolsa?","Cavidad timpánica y trompa de Eustaquio"],
+["Arcos faríngeos","¿Qué forma la 2.ª bolsa?","Las amígdalas palatinas"],
+["Arcos faríngeos","¿Qué forma la 3.ª bolsa?","Timo y paratiroides inferiores"],
+["Arcos faríngeos","¿Qué forma la 4.ª bolsa?","Paratiroides superiores"],
+["Arcos faríngeos","¿Qué son las células parafoliculares?","Vienen del cuerpo ultimobranquial; regulan el calcio"],
+["Arcos faríngeos","¿Qué nervio inerva el primer arco?","El trigémino (V)"],
+["Arcos faríngeos","¿Qué cartílago pertenece al primer arco?","El cartílago de Meckel"],
+["Arcos faríngeos","¿Qué huesillo forma el segundo arco?","El estribo"],
+["Arcos faríngeos","¿Qué músculo forma el tercer arco?","El estilofaríngeo"],
+["Arcos faríngeos","¿Qué es el síndrome de Treacher Collins?","Autosómico dominante; hipoplasia malar"],
+["Arcos faríngeos","¿Qué es la secuencia de Pierre Robin?","Micrognatia (mandíbula pequeña)"],
+["Arcos faríngeos","¿Qué es el síndrome de DiGeorge?","Aplasia o hipoplasia del timo"],
+["Lengua y cara","¿Qué forma los 2/3 anteriores de la lengua?","Protrusiones del 1.er arco (trigémino)"],
+["Lengua y cara","¿Qué forma la raíz de la lengua?","El 3.er arco (glosofaríngeo)"],
+["Lengua y cara","¿De dónde vienen los músculos de la lengua?","De los primeros 4 miotomas occipitales"],
+["Lengua y cara","¿Qué es la anquiloglosia?","Frenillo lingual corto"],
+["Lengua y cara","¿Dónde se origina la tiroides?","En el agujero ciego, por el conducto tirogloso"],
+["Lengua y cara","¿Cuándo se forma un quiste tirogloso?","Cuando el conducto tirogloso no se degenera"],
+["Lengua y cara","¿Por qué aparece el labio hendido?","El maxilar no se fusiona con el segmento intermaxilar"],
+["Lengua y cara","¿Qué es la macrostomia?","Fisura facial transversa (falta fusión maxilar-mandíbula)"]
+];
+var T=["Todos"].concat(D.map(function(x){return x[0]}).filter(function(v,i,a){return a.indexOf(v)===i}));
+var mode="tarjetas",topic="Todos",S={};
+var tabs=[["tarjetas","Tarjetas"],["quiz","Quiz"],["relacionar","Relacionar"],["qa","Preguntas y respuestas"]];
+var $v=document.getElementById("view");
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function pool(){return topic==="Todos"?D:D.filter(function(x){return x[0]===topic})}
+function nav(){document.getElementById("tabs").innerHTML=tabs.map(function(t){return '<button role="tab" data-m="'+t[0]+'" aria-selected="'+(t[0]===mode)+'">'+t[1]+'</button>'}).join("")}
+document.getElementById("topic").innerHTML=T.map(function(t){return '<option>'+esc(t)+'</option>'}).join("");
+document.getElementById("topic").onchange=function(e){topic=e.target.value;start()};
+document.getElementById("tabs").onclick=function(e){var m=e.target.getAttribute("data-m");if(m){mode=m;start()}};
+function start(){nav();S={};if(mode==="tarjetas"){S.d=shuf(pool());S.i=0;S.f=false;cards()}else if(mode==="quiz")quizStart();else if(mode==="relacionar")matchStart();else qa()}
+
+function cards(){var c=S.d[S.i];
+$v.innerHTML='<button class="card'+(S.f?' back':'')+'" id="c"><small>'+esc(c[0])+(S.f?' · respuesta':' · toca para voltear')+'</small><span class="t">'+esc(S.f?c[2]:c[1])+'</span></button><div class="row"><button class="btn" id="pv">Anterior</button><span class="cnt">'+(S.i+1)+' de '+S.d.length+'</span><button class="btn p" id="nx">Siguiente</button></div><button class="btn" id="sh">Mezclar</button>';
+document.getElementById("c").onclick=function(){S.f=!S.f;cards()};
+document.getElementById("pv").onclick=function(){S.i=(S.i-1+S.d.length)%S.d.length;S.f=false;cards()};
+document.getElementById("nx").onclick=function(){S.i=(S.i+1)%S.d.length;S.f=false;cards()};
+document.getElementById("sh").onclick=start}
+
+function quizStart(){var p=pool(),all=D.map(function(x){return x[2]});
+S.q=shuf(p).slice(0,10).map(function(c){var wrong=shuf(p.map(function(x){return x[2]}).filter(function(a){return a!==c[2]}));if(wrong.length<3)wrong=shuf(all.filter(function(a){return a!==c[2]}));return{q:c[1],a:c[2],o:shuf([c[2]].concat(wrong.slice(0,3)))}});
+S.i=0;S.s=0;S.p=null;quiz()}
+function quiz(){if(S.i>=S.q.length){$v.innerHTML='<div style="text-align:center"><div class="big">'+S.s+' / '+S.q.length+'</div><p>'+(S.s>=S.q.length*.8?'Muy bien, vas listo para el parcial.':'Repasa las tarjetas del tema y vuelve a intentarlo.')+'</p><button class="btn p" id="rs">Nuevo quiz</button></div>';document.getElementById("rs").onclick=start;return}
+var q=S.q[S.i];
+$v.innerHTML='<div class="bar"><i style="width:'+(S.i/S.q.length*100)+'%"></i></div><div class="cnt">Pregunta '+(S.i+1)+' de '+S.q.length+'</div><div class="q">'+esc(q.q)+'</div>'+q.o.map(function(o,k){var c='';if(S.p!==null){if(o===q.a)c=' ok';else if(k===S.p)c=' bad'}return '<button class="opt'+c+'" data-k="'+k+'"'+(S.p!==null?' disabled':'')+'>'+esc(o)+'</button>'}).join('')+(S.p!==null?'<div class="row"><span></span><button class="btn p" id="nq">'+(S.i===S.q.length-1?'Ver resultado':'Siguiente')+'</button></div>':'');
+$v.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){S.p=+b.getAttribute("data-k");if(q.o[S.p]===q.a)S.s++;quiz()}});
+var n=document.getElementById("nq");if(n)n.onclick=function(){S.i++;S.p=null;quiz()}}
+
+function matchStart(){var s=shuf(pool()).slice(0,6);S.L=s.map(function(c,i){return{i:i,t:c[1]}});S.R=shuf(s.map(function(c,i){return{i:i,t:c[2]}}));S.done={};S.a=null;S.b=null;S.err=0;match()}
+function match(){var n=Object.keys(S.done).length,fin=n===S.L.length;
+function col(arr,side){return arr.map(function(x){var c='m';if(S.done[x.i])c+=' done';else if(S[side]===x.i)c+=' sel';return '<button class="'+c+'" data-s="'+side+'" data-i="'+x.i+'">'+esc(x.t)+'</button>'}).join('')}
+$v.innerHTML='<p class="cnt">Toca una pregunta y luego su respuesta. Aciertos: '+n+' de '+S.L.length+' · Errores: '+S.err+'</p><div class="cols"><div>'+col(S.L,'a')+'</div><div>'+col(S.R,'b')+'</div></div>'+(fin?'<p><strong>Completado.</strong></p>':'')+'<button class="btn p" id="nm">Nueva ronda</button>';
+document.getElementById("nm").onclick=start;
+$v.querySelectorAll(".m").forEach(function(b){b.onclick=function(){var i=+b.getAttribute("data-i"),s=b.getAttribute("data-s");if(S.done[i])return;S[s]=i;
+if(S.a!==null&&S.b!==null){if(S.a===S.b){S.done[S.a]=1}else{S.err++}S.a=null;S.b=null}match()}})}
+
+function qa(){$v.innerHTML=pool().map(function(c){return '<details><summary>'+esc(c[1])+'</summary><p>'+esc(c[2])+'</p></details>'}).join('')}
+start();
+</script>
+</body>
+</html>
